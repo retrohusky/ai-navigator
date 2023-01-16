@@ -15,3 +15,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/login', 'AuthController@login');
 
+Route::get('/register', 'AuthController@create');
+Route::post('/register', 'AuthController@store');
