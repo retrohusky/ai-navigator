@@ -10,6 +10,10 @@
         "laravel-vite-plugin": "^0.7.2",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
-        "vite": "^4.0.0"
+        "vite": "^4.0.0",
+        "@vitejs/plugin-vue": "^4.0.0"
+    },
+    "dependencies": {
+        "@inertiajs/vue3": "^1.0.0"
     }
 }

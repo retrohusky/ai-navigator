@@ -5,16 +5,18 @@ namespace Modules\Auth\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AuthController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return Renderable
+     * @return Response
      */
-    public function index()
+    public function login(): Response
     {
-        return view('auth::index');
+        return Inertia::render('Auth::Login');
     }
 
     /**
