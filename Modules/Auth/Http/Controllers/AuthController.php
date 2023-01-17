@@ -2,11 +2,16 @@
 
 namespace Modules\Auth\Http\Controllers;
 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
+use Modules\Auth\Entities\User;
+use Modules\Auth\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -21,21 +26,40 @@ class AuthController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * @return Renderable
+     * @return Response
      */
     public function create()
     {
-        return view('auth::create');
+        return Inertia::render('Auth::Register');
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Renderable
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $collection = collect($request->validated());
+
+            $password = $collection->get('password');
+            $password = $this->hashPassword($password);
+            $collection->put('password', $password);
+            $user = User::create($collection->all());
+            event( new Registered( $user ) );
+        } catch ( \Exception $exception ) {
+            Log::error('Error during the user creation.', [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage()
+            ]);
+            DB::rollBack();
+        }
+
+        DB::commit();
+
+        return redirect()->back();
     }
 
     /**
@@ -77,5 +101,10 @@ class AuthController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function hashPassword(string $get) : string
+    {
+        return bcrypt($get);
     }
 }
