@@ -2,13 +2,21 @@
 
 namespace Modules\Auth\Entities;
 
+use DateTime;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property DateTime $email_verified_at
+ * @property string $email
+ */
 class User extends Model implements MustVerifyEmail
 {
     use HasUuids;
+    use Notifiable;
 
     protected $hidden = [
         'password',
@@ -24,23 +32,24 @@ class User extends Model implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function hasVerifiedEmail()
+    public function hasVerifiedEmail(): bool
     {
-        // TODO: Implement hasVerifiedEmail() method.
+        return !is_null( $this->email_verified_at );
     }
 
-    public function markEmailAsVerified()
+    public function markEmailAsVerified(): bool
     {
-        // TODO: Implement markEmailAsVerified() method.
+        $this->email_verified_at = now();
+        return $this->save();
     }
 
     public function sendEmailVerificationNotification()
     {
-        // TODO: Implement sendEmailVerificationNotification() method.
+        $this->notify( new VerifyEmail );
     }
 
-    public function getEmailForVerification()
+    public function getEmailForVerification(): string
     {
-        // TODO: Implement getEmailForVerification() method.
+        return $this->email;
     }
 }

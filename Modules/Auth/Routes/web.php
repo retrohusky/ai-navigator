@@ -11,9 +11,13 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', 'AuthController@login');
 
 Route::get('/register', 'AuthController@create');
 Route::post('/register', 'AuthController@store');
+
+Route::get('email/verify/{id}', 'EmailVerificationController@verify')->name('verification.verify');
+Route::get('email/resend', 'EmailVerificationController@resend')->name('verification.resend');
