@@ -1,6 +1,7 @@
 <script setup>
 
 import { useForm } from "@inertiajs/vue3";
+import Errors from './Errors.vue';
 
 const form = useForm({
     username: null,
@@ -9,23 +10,11 @@ const form = useForm({
     confirmPassword: null,
 });
 
-const handle = () => {
-    form.post('/register', {
-        preserveScroll: true,
-    })
-}
-
 </script>
 
 <template>
-    <div v-if="form.errors">
-        <p>There are some problems with your form submissions:</p>
-        <ul>
-            <li v-for="error in form.errors">
-                {{ error }}
-            </li>
-        </ul>
-    </div>
+    <Errors :form="form" />
+
     <form @submit.prevent="form.post('/register')">
         <label for="">
             <input v-model="form.username" type="text">
