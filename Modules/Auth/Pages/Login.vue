@@ -14,7 +14,7 @@ const form = useForm({
 <template>
     <Errors :form="form" />
 
-    <form @submit.prevent="form.post('/login')">
+    <form @submit.prevent="form.post('/login')">    
         <label for="">
             <input v-model="form.email" type="text">
         </label>

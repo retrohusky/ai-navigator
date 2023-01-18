@@ -11,10 +11,12 @@
 |
 */
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', 'AuthController@login');
+Route::post('/login', 'AuthController@authenticate');
+
+Route::post('/logout', 'AuthController@logout');
 
 Route::get('/register', 'AuthController@create');
 Route::post('/register', 'AuthController@store');
