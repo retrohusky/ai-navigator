@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Modules\Auth\Entities\User;
 
 class EmailVerificationController extends Controller
@@ -15,7 +16,14 @@ class EmailVerificationController extends Controller
         /**
          * @var User $user
          */
-        $user = User::findOrFail($id);
+        try {
+            $user = User::findOrFail($id);
+        } catch (\Exception $e) {
+            Log::error('There was a problem with finding the user.', [
+                'status' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+        }
 
         if ( $user->markEmailAsVerified() ) {
             return response()->json([
