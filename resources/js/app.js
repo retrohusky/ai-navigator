@@ -10,7 +10,9 @@ createInertiaApp({
         let ModulePath = `../../Modules/${Module}/Pages/${View}.vue`;
 
         if (!Modules[ModulePath]) {
-            console.error('fail');
+            console.error('Error when resolving a module!');
+            console.log( ModulePath );
+            return false;
         }
 
         // @ts-ignore
